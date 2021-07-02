@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.7.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"znnnnn.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="“折腾了一下oracle，写篇小心得。”">
+<meta name="keywords" content="C#,Database,ORACLE,VisualStudio">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VS2017连接ORACLE">
+<meta property="og:url" content="https://znnnnn.github.io/2018/05/24/1/index.html">
+<meta property="og:site_name" content="MR-znnnnn&#39;s Blog">
+<meta property="og:description" content="“折腾了一下oracle，写篇小心得。”">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://p8jsbjr9h.bkt.clouddn.com/jonas-lee-461148-unsplash.jpg">
+<meta property="og:image" content="http://p8jsbjr9h.bkt.clouddn.com/add-database.png">
+<meta property="og:updated_time" content="2021-07-02T09:51:52.165Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="VS2017连接ORACLE">
+<meta name="twitter:description" content="“折腾了一下oracle，写篇小心得。”">
+<meta name="twitter:image" content="http://p8jsbjr9h.bkt.clouddn.com/jonas-lee-461148-unsplash.jpg">
+
+<link rel="canonical" href="https://znnnnn.github.io/2018/05/24/1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>VS2017连接ORACLE | MR-znnnnn's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">MR-znnnnn's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Technology&Daily thinking</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://znnnnn.github.io/2018/05/24/1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="znnnnn">
+      <meta itemprop="description" content="生存中，没所谓标准答案">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MR-znnnnn's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VS2017连接ORACLE
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-05-24 21:02:41" itemprop="dateCreated datePublished" datetime="2018-05-24T21:02:41+08:00">2018-05-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-02 17:51:52" itemprop="dateModified" datetime="2021-07-02T17:51:52+08:00">2021-07-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="http://p8jsbjr9h.bkt.clouddn.com/jonas-lee-461148-unsplash.jpg" alt="&quot;&quot;"></p>
+<blockquote>
+<p>“折腾了一下oracle，写篇小心得。”</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="Visual-Studio-2017连接Oracle-12c数据库"><a href="#Visual-Studio-2017连接Oracle-12c数据库" class="headerlink" title="Visual Studio 2017连接Oracle 12c数据库"></a>Visual Studio 2017连接Oracle 12c数据库</h1><h2 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h2><p>主机：Win10 + VS2017 + ODP.Net for VS2017 + Oracle 12c</p>
+<h2 id="配置ODP-Net"><a href="#配置ODP-Net" class="headerlink" title="配置ODP.Net"></a>配置ODP.Net</h2><p>首先下载 <a href="http://www.oracle.com/technetwork/topics/dotnet/whatsnew/vs2012welcome-1835382.html" target="_blank" rel="noopener">“Oracle Developer Tools for Visual Studio 2017”</a> ，下载此文件需要注册Oracle社区账号并接受相关的协议，此文件提供了以下组件：</p>
+<ul>
+<li>Oracle Developer Tools for Visual Studio 12.1.0.2.4</li>
+<li>Oracle Data Provider for .NET 4 12.1.0.2.0</li>
+<li>Oracle Providers for ASP.NET 4 12.1.0.2.0</li>
+</ul>
+<p>下载完成后，首先<code>关闭VS</code>，然后运行MSI安装程序进行安装，安装完成后会自动注册VS2017的相关插件，重新启动VS2017后将会看到Oracle的相关命令，比如SQL *PLUS支持等。同时添加数据库时也能看到相应的选项。</p>
+<blockquote>
+<p>ODP.Net支持所有Oracle版本，因此下载时只需要注意VS的版本即可。</p>
+</blockquote>
+<h2 id="配置tnsnames-ora"><a href="#配置tnsnames-ora" class="headerlink" title="配置tnsnames.ora"></a>配置tnsnames.ora</h2><p>ODP.Net默认使用安装目录下的<code>tnsnames.ora</code>，若安装目录在Program Files下，可能会遇到无权限等问题，此时使用管理员权限打开命令行，切换到对应目录并使用notepad编辑。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;数据源别名&gt; =</span><br><span class="line">  (DESCRIPTION =</span><br><span class="line">    (ADDRESS = (PROTOCOL = TCP)(HOST = &lt;主机名或IP&gt;)(PORT = &lt;端口号&gt;))</span><br><span class="line">    (CONNECT_DATA =</span><br><span class="line">      (SERVER = DEDICATED)</span><br><span class="line">      (SERVICE_NAME = &lt;数据库服务名&gt;)</span><br><span class="line">    )</span><br><span class="line">  )</span><br></pre></td></tr></table></figure>
+<h2 id="添加数据库"><a href="#添加数据库" class="headerlink" title="添加数据库"></a>添加数据库</h2><p>打开<code>工具</code>-<code>连接到数据库</code>，数据源修改为<code>Oracle数据库</code>下的<code>ODP.NET</code>,<code>托管驱动程序</code>，然后点击<code>确定</code>，打开<code>添加连接</code>窗口。</p>
+<p><img src="http://p8jsbjr9h.bkt.clouddn.com/add-database.png" alt="&quot;&quot;"><br>填写用户名，密码并选择数据源，然后测试连接，成功的话说明已经连通，点击确定即可。</p>
+<h2 id="连接数据库并使用"><a href="#连接数据库并使用" class="headerlink" title="连接数据库并使用"></a>连接数据库并使用</h2><h3 id="连接数据库"><a href="#连接数据库" class="headerlink" title="连接数据库"></a>连接数据库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">private static string connectionString = &quot;Password=tiger;User ID=c##scott;Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=127.0.0.1)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=orcl)));&quot;;</span><br><span class="line">// private static string connectionString</span><br><span class="line"></span><br><span class="line">public static DataTable ExecuteReader(String sql)</span><br><span class="line">&#123;</span><br><span class="line">    DataTable dt = new DataTable();</span><br><span class="line">    DataSet ds = new DataSet();</span><br><span class="line">    OracleConnection connection = new OracleConnection(connectionString);</span><br><span class="line">    connection.Open();</span><br><span class="line">    OracleCommand command = new OracleCommand(sql, connection);</span><br><span class="line">    OracleDataAdapter sda = new OracleDataAdapter(command);</span><br><span class="line">    sda.Fill(ds);</span><br><span class="line">    dt = ds.Tables[0];</span><br><span class="line">    sda.Dispose();</span><br><span class="line">    ds.Dispose();</span><br><span class="line">    connection.Close();</span><br><span class="line">    return dt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h3><p>成功配置数据源之后，只需要向界面上拖动<code>DataGridView</code>，并进行相关配置，选择自己需要的表即可。</p>
+<h3 id="插入图片的正确姿势"><a href="#插入图片的正确姿势" class="headerlink" title="插入图片的正确姿势"></a>插入图片的正确姿势</h3><p>图片作为二进制数据无法直接拼凑出SQL命令，我们需要使用<code>OracleCommand</code>自带的<code>Parameters</code>功能。在SQL命令中用<code>:photo</code>来代表一个参量，然后使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlCom.Parameters.Add(&quot;photo&quot;, OracleDbType.Blob, imgData.Length)</span><br></pre></td></tr></table></figure>
+<p>来分别指定这个参量的类型和所占空间大小<br>最后使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlCom.Parameters(0).Value = imgData</span><br></pre></td></tr></table></figure>
+<p>来指定这个参量的值。<br>整个插入图片过程的代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Dim conn As New OracleConnection(oradb)</span><br><span class="line">Dim imgData(0) As Byte</span><br><span class="line">Dim ms As New System.IO.MemoryStream</span><br><span class="line">PictureBox1.BackgroundImage.Save(ms, PictureBox1.BackgroundImage.RawFormat)</span><br><span class="line">ReDim imgData(ms.Length - 1)</span><br><span class="line">ms.Read(imgData, 0, ms.Length)</span><br><span class="line">ms.Close()</span><br><span class="line">conn.Open()</span><br><span class="line">Dim sql As String = &quot;insert into hero values&quot; &amp; &quot;(&quot; &amp; TextBox1.Text &amp; &quot;:photo&quot; &amp; &quot;)&quot;</span><br><span class="line">Dim sqlCom As New OracleCommand</span><br><span class="line">sqlCom.CommandText = sql</span><br><span class="line">sqlCom.Connection = conn</span><br><span class="line">sqlCom.Parameters.Add(&quot;photo&quot;, OracleDbType.Blob, imgData.Length)</span><br><span class="line">sqlCom.Parameters(0).Value = imgData</span><br><span class="line">sqlCom.ExecuteNonQuery()</span><br></pre></td></tr></table></figure>
+<h2 id="常见错误"><a href="#常见错误" class="headerlink" title="常见错误"></a>常见错误</h2><h3 id="column-not-allowed-here"><a href="#column-not-allowed-here" class="headerlink" title="column not allowed here"></a>column not allowed here</h3><p>数据类型不符，检查对应项目数据类型是否正确。</p>
+<h3 id="missing-comma"><a href="#missing-comma" class="headerlink" title="missing comma"></a>missing comma</h3><p>命令格式不对，检查一下自己的SQL命令是否有错误，特别是在有字符串的时候，需要使用<code>&quot;&quot;</code>来代表一个字符串中的<code>&quot;</code>。</p>
+<h3 id="identifier-is-too-long"><a href="#identifier-is-too-long" class="headerlink" title="identifier is too long"></a>identifier is too long</h3><p>标识符过长（不得超过30字符），不是非常明白原因，不过我取消掉insert命令中指定位置的部分之后，这个错误消失了。</p>
+<h3 id="missing-INTO-keyword"><a href="#missing-INTO-keyword" class="headerlink" title="missing INTO keyword"></a>missing INTO keyword</h3><p>缺少into关键字（手滑打成了inte），检查一下自己的SQL命令是否有错误。</p>
+<h3 id="cannot-insert-NULL-into-“SYSTEM”-“HERO”-“HEROCATEGORYID”"><a href="#cannot-insert-NULL-into-“SYSTEM”-“HERO”-“HEROCATEGORYID”" class="headerlink" title="cannot insert NULL into (“SYSTEM”.“HERO”.“HEROCATEGORYID”)"></a>cannot insert NULL into (“SYSTEM”.“HERO”.“HEROCATEGORYID”)</h3><p>这些项都指定了非0值，故不能不赋值，为对应项目赋值即可。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C#</a>
+              <a href="/tags/Database/" rel="tag"># Database</a>
+              <a href="/tags/ORACLE/" rel="tag"># ORACLE</a>
+              <a href="/tags/VisualStudio/" rel="tag"># VisualStudio</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/05/09/1/" rel="prev" title="git工具学习心得">
+      <i class="fa fa-chevron-left"></i> git工具学习心得
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Visual-Studio-2017连接Oracle-12c数据库"><span class="nav-number">1.</span> <span class="nav-text">Visual Studio 2017连接Oracle 12c数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#开发环境"><span class="nav-number">1.1.</span> <span class="nav-text">开发环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置ODP-Net"><span class="nav-number">1.2.</span> <span class="nav-text">配置ODP.Net</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置tnsnames-ora"><span class="nav-number">1.3.</span> <span class="nav-text">配置tnsnames.ora</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加数据库"><span class="nav-number">1.4.</span> <span class="nav-text">添加数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连接数据库并使用"><span class="nav-number">1.5.</span> <span class="nav-text">连接数据库并使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#连接数据库"><span class="nav-number">1.5.1.</span> <span class="nav-text">连接数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询数据"><span class="nav-number">1.5.2.</span> <span class="nav-text">查询数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入图片的正确姿势"><span class="nav-number">1.5.3.</span> <span class="nav-text">插入图片的正确姿势</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见错误"><span class="nav-number">1.6.</span> <span class="nav-text">常见错误</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#column-not-allowed-here"><span class="nav-number">1.6.1.</span> <span class="nav-text">column not allowed here</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#missing-comma"><span class="nav-number">1.6.2.</span> <span class="nav-text">missing comma</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#identifier-is-too-long"><span class="nav-number">1.6.3.</span> <span class="nav-text">identifier is too long</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#missing-INTO-keyword"><span class="nav-number">1.6.4.</span> <span class="nav-text">missing INTO keyword</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cannot-insert-NULL-into-“SYSTEM”-“HERO”-“HEROCATEGORYID”"><span class="nav-number">1.6.5.</span> <span class="nav-text">cannot insert NULL into (“SYSTEM”.“HERO”.“HEROCATEGORYID”)</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">znnnnn</p>
+  <div class="site-description" itemprop="description">生存中，没所谓标准答案</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">znnnnn</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
